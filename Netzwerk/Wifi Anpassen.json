@@ -1,0 +1,652 @@
+[
+    {
+        "id": "baaa480594234d6a",
+        "type": "group",
+        "z": "e4f6393f40f8b1a1",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "30cb21a2901a712d",
+            "6c159b0a73e9684d",
+            "7cf8d0a4fd15930d",
+            "a9512a30.b43b9",
+            "a5f07e77.448418",
+            "b27ee4d3.9cadd8",
+            "ab34450d.848f58",
+            "a3b5d48a.3adbf8",
+            "5123a6e0.10cbf8",
+            "5d8975c5.17969",
+            "b5aa8b964c21f09e",
+            "f8c9e85734303ee0"
+        ],
+        "x": 14,
+        "y": 59,
+        "w": 972,
+        "h": 382
+    },
+    {
+        "id": "30cb21a2901a712d",
+        "type": "exec",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "command": "sudo iwlist wlan0 scan | grep 'ESSID:'",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 470,
+        "y": 120,
+        "wires": [
+            [
+                "7cf8d0a4fd15930d"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "6c159b0a73e9684d",
+        "type": "inject",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 120,
+        "wires": [
+            [
+                "30cb21a2901a712d"
+            ]
+        ]
+    },
+    {
+        "id": "7cf8d0a4fd15930d",
+        "type": "debug",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "a9512a30.b43b9",
+        "type": "inject",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 260,
+        "wires": [
+            [
+                "a5f07e77.448418"
+            ]
+        ]
+    },
+    {
+        "id": "a5f07e77.448418",
+        "type": "exec",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "command": "sudo iwlist wlan0 scan | grep 'ESSID:'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": false,
+        "oldrc": false,
+        "name": "",
+        "x": 410,
+        "y": 260,
+        "wires": [
+            [
+                "b27ee4d3.9cadd8"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "b27ee4d3.9cadd8",
+        "type": "function",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "Parse SSIDs",
+        "func": "var lines = msg.payload.split('\\n');\nvar ssids = [];\n\nfor (var i = 0; i < lines.length; i++) {\n    var line = lines[i].trim();\n    if (line.startsWith(\"ESSID:\")) {\n        var ssid = line.substring(7).replace(/\"/g, ''); // Entferne Anführungszeichen am Anfang und Ende der SSID\n        if (ssid.length > 0) { // Überprüfe, ob die SSID nicht leer ist\n            ssids.push(ssid);\n        }\n    }\n}\n\nmsg.options = ssids;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 260,
+        "wires": [
+            [
+                "ab34450d.848f58",
+                "f8c9e85734303ee0"
+            ]
+        ]
+    },
+    {
+        "id": "ab34450d.848f58",
+        "type": "ui_dropdown",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "",
+        "label": "Wähle ein WLAN aus",
+        "tooltip": "",
+        "place": "",
+        "group": "7b1cb98d.2f8b04",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [],
+        "payload": "",
+        "topic": "",
+        "topicType": "str",
+        "x": 180,
+        "y": 340,
+        "wires": [
+            [
+                "a3b5d48a.3adbf8"
+            ]
+        ]
+    },
+    {
+        "id": "a3b5d48a.3adbf8",
+        "type": "ui_text_input",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "",
+        "label": "Passwort eingeben",
+        "tooltip": "",
+        "group": "7b1cb98d.2f8b04",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "mode": "text",
+        "delay": 300,
+        "topic": "",
+        "topicType": "str",
+        "x": 410,
+        "y": 400,
+        "wires": [
+            [
+                "5123a6e0.10cbf8"
+            ]
+        ]
+    },
+    {
+        "id": "5123a6e0.10cbf8",
+        "type": "function",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "Check Password",
+        "func": "var selectedSSID = msg.topic;\nvar enteredPassword = msg.payload;\n\n// Simulated validation\nvar validPasswords = {\n    \"MyWifi1\": \"password1\",\n    \"MyWifi2\": \"password2\",\n    \"MyWifi3\": \"password3\"\n};\n\nif (validPasswords[selectedSSID] === enteredPassword) {\n    msg.payload = \"Verbindung erfolgreich.\";\n} else {\n    msg.payload = \"Falsches Passwort.\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 400,
+        "wires": [
+            [
+                "5d8975c5.17969"
+            ]
+        ]
+    },
+    {
+        "id": "5d8975c5.17969",
+        "type": "ui_toast",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "",
+        "name": "",
+        "x": 770,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b5aa8b964c21f09e",
+        "type": "ui_button",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "",
+        "group": "7b1cb98d.2f8b04",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "WLAN Suchen",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "date",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 160,
+        "y": 200,
+        "wires": [
+            [
+                "a5f07e77.448418"
+            ]
+        ]
+    },
+    {
+        "id": "f8c9e85734303ee0",
+        "type": "debug",
+        "z": "e4f6393f40f8b1a1",
+        "g": "baaa480594234d6a",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "7b1cb98d.2f8b04",
+        "type": "ui_group",
+        "name": "WLAN Verbindung",
+        "tab": "06d30216cab49263",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "06d30216cab49263",
+        "type": "ui_tab",
+        "z": "e564c6eada8c2868",
+        "name": "System",
+        "icon": "data_usage",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "ea3ae00e24df5f65",
+        "type": "group",
+        "z": "e4f6393f40f8b1a1",
+        "name": "Status Netzwerk",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "e8000a3a.8340b8",
+            "58c8f7c3.a5bc28",
+            "5e05de64.08959c",
+            "c79d66aa.286918",
+            "5c19ae48.70f5d8",
+            "27c73fbba93d672a",
+            "1492112773361112",
+            "472fb20e.1468f8",
+            "5a8c691c93d0b02a",
+            "768d528304317894",
+            "6ee507d12ebf0366",
+            "f47fa225d21a1d3a",
+            "ecd22eef8db756d9"
+        ],
+        "x": 34,
+        "y": 519,
+        "w": 892,
+        "h": 302
+    },
+    {
+        "id": "e8000a3a.8340b8",
+        "type": "inject",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "10",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 660,
+        "wires": [
+            [
+                "58c8f7c3.a5bc28",
+                "5e05de64.08959c",
+                "472fb20e.1468f8"
+            ]
+        ]
+    },
+    {
+        "id": "58c8f7c3.a5bc28",
+        "type": "exec",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "command": "ip addr show eth0 | grep 'inet ' | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "LAN IP",
+        "x": 380,
+        "y": 580,
+        "wires": [
+            [
+                "c79d66aa.286918",
+                "6ee507d12ebf0366"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5e05de64.08959c",
+        "type": "exec",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "command": "ip addr show wlan0 | grep 'inet ' | awk '{print $2}'",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "WLAN IP",
+        "x": 380,
+        "y": 660,
+        "wires": [
+            [
+                "5c19ae48.70f5d8",
+                "f47fa225d21a1d3a"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c79d66aa.286918",
+        "type": "debug",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "LAN IP Adresse",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "5c19ae48.70f5d8",
+        "type": "debug",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "WLAN IP Adresse",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "27c73fbba93d672a",
+        "type": "ui_text",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "group": "7b1cb98d.2f8b04",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "LAN",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 750,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "1492112773361112",
+        "type": "ui_text",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "group": "7b1cb98d.2f8b04",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Wifi",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 750,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "472fb20e.1468f8",
+        "type": "exec",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "command": "iwgetid -r",
+        "addpay": false,
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "oldrc": false,
+        "name": "SSID abrufen",
+        "x": 360,
+        "y": 740,
+        "wires": [
+            [
+                "5a8c691c93d0b02a",
+                "ecd22eef8db756d9"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "5a8c691c93d0b02a",
+        "type": "debug",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "768d528304317894",
+        "type": "ui_text",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "group": "7b1cb98d.2f8b04",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "SSID",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 750,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "6ee507d12ebf0366",
+        "type": "function",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "function 1",
+        "func": "if (msg.payload.trim() === \"\") {\n    // Wenn der eingehende String leer ist, sende \"nicht verbunden\"\n    msg.payload = \"Netzwerkkabel entfernt\";\n} else {\n    // Andernfalls leite den eingehenden String einfach weiter\n    msg.payload = msg.payload;\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 560,
+        "wires": [
+            [
+                "27c73fbba93d672a"
+            ]
+        ]
+    },
+    {
+        "id": "f47fa225d21a1d3a",
+        "type": "function",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "function 2",
+        "func": "if (msg.payload.trim() === \"\") {\n    // Wenn der eingehende String leer ist, sende \"nicht verbunden\"\n    msg.payload = \"nicht verbunden\";\n} else {\n    // Andernfalls leite den eingehenden String einfach weiter\n    msg.payload = msg.payload;\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 640,
+        "wires": [
+            [
+                "1492112773361112"
+            ]
+        ]
+    },
+    {
+        "id": "ecd22eef8db756d9",
+        "type": "function",
+        "z": "e4f6393f40f8b1a1",
+        "g": "ea3ae00e24df5f65",
+        "name": "function 3",
+        "func": "if (msg.payload.trim() === \"\") {\n    // Wenn der eingehende String leer ist, sende \"nicht verbunden\"\n    msg.payload = \"nicht verbunden\";\n} else {\n    // Andernfalls leite den eingehenden String einfach weiter\n    msg.payload = msg.payload;\n}\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 740,
+        "wires": [
+            [
+                "768d528304317894"
+            ]
+        ]
+    }
+]
